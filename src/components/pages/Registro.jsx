@@ -14,34 +14,49 @@ const Registro = () => {
     telefono: '',
     password: '',
     cpassword: '',
-    zona: '',
     region: 'Region Metropolitana',
     comuna: '',
     direccion: '',
   });
 
-  
-
-  // const comunasSantiago = [
-  //   { id: 1, nombre: 'Santiago' },
-  //   { id: 2, nombre: 'Providencia' },
-  //   { id: 3, nombre: 'Ñuñoa' },
-  //   { id: 4, nombre: 'Macul' },
-  //   { id: 5, nombre: 'San Joaquín' },
-  //   // Agrega más comunas según sea necesario
-  // ];
-
   const [comunas, setComunas] = useState([]);
 
   useEffect(() => {
     // Hacer la solicitud al endpoint de comunas usando Axios
-    axios.get('http://localhost:8080/api/comunas')
-      .then(response => setComunas(response.data))
-      .catch(error => console.error('Error al obtener comunas:', error));
+    axios.get('http://localhost:8080/api/comunas', { maxRedirects: 5 })
+    .then(response => {
+      setComunas(response.data)
+    })
+    .catch(error => {
+      console.error('Error al obtener comunas:', error);
+    });
 
   }, []); // Se ejecuta solo una vez al montar el componente
 
-  console.log(comunas);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:8080/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log('Usuario registrado exitosamente');
+      } else {
+        console.error('Error al registrar usuario:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error de red o del lado del cliente:', error);
+    }
+
+    console.log("Formulario enviado");
+  };
 
 
   const handleInputChange = (e) => {
@@ -49,11 +64,7 @@ const Registro = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Formulario enviado', formData);
-    // Aquí puedes realizar acciones adicionales con los datos ingresados
-  };
+  
 
   return (
     <div className="container">
