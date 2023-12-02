@@ -1,0 +1,97 @@
+.panel-body-padding {
+    padding-top: 0%; /* Define aquí el padding top específico para el componente Panel */
+    background-color: #f1f0f3
+  }
+
+
+.navbarPanel {
+    height: 65px; 
+    background-color: #FFFFFF ;
+    padding: 0rem 2rem;
+    margin-bottom: 0px;
+    box-shadow: 10px 0px 35px rgba(0, 0, 0, 0.3); 
+    position: relative; /* Asegura que el navbar tenga una posición definida */
+    z-index: 1; /* Define un índice z mayor que el del Sidebar */
+
+}
+
+.navbarPanel-cls-top .navbar2-brand {
+    color: #fff;
+    background: #202020;
+    width: 260px;
+    text-align: center;
+    height: 75px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    font-weight: 900;
+    padding-top: 25px;
+    text-transform:uppercase;
+}
+
+.navbarPanel-cls-top .navbarPanel-brand:hover {
+    background: #202020;
+    color: #FFFFFF
+}
+
+.flex {
+    display: flex ;
+}
+
+.content.panel-content {
+    padding: 0 20px; /* Agrega un espaciado de 20px a los lados */
+    margin: 0 auto; /* Esto centra el contenido */
+    max-width: 1800px; /* Limita el ancho máximo del contenido */
+
+
+}
+
+
+
+
+
+.sidebarPanel {
+    width: 16rem;
+    height: calc(100vh - 60px);
+    background-color: #FFFFFF;
+    font-family: 'Nunito', sans-serif; /* Cambia la fuente */
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    padding: 13px 30px 13px 30px; /* Añade relleno a los textos en ambos lados */
+    position: relative; /* Asegura que el sidebar tenga una posición definida */
+    z-index: 0; /* Asegúrate de que el índice z sea menor que el Navbar */
+    
+  }
+  
+  /* Estilo de los elementos de la lista */
+  .sidebarPanel ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebarPanel ul li {
+    margin-bottom: 15px;
+  }
+  
+  .sidebarPanel ul li a {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  
+  .sidebarPanel ul li a .svg-inline--fa {
+    margin-right: 10px;
+    font-size: 20px; /* Ajusta este valor según el tamaño deseado */
+    background-color: transparent !important;
+  }
+  
+  .sidebarPanel ul li a:hover {
+    background-color: #0056b3;
+    color: #fff;
+  }
+

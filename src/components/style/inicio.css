@@ -1,0 +1,157 @@
+.img-fluid {
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    max-width: 700x;
+    max-height: 320px;
+  }
+
+  #agregar-mascota {
+    width: 279px;
+    height: 149px;
+    line-height: 100px;
+    border-radius: 10px;
+    background-color: #96B2FB; /* Azul pastel */
+    color: white;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    &:hover {
+      background-color: #8599E2; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #asistencia-emergencia {
+    width: 279px;
+    height: 149px;
+    border-radius: 10px;
+    background-color: #5050B2; /* Azul pastel */
+    color: white;
+    line-height: 50px;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    
+    &:hover {
+      background-color: #434390; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #servicio-publico {
+    width: 279px;
+    height: 149px;
+    border-radius: 10px;
+    background-color: #8F8EED; /* Azul pastel */
+    color: white;
+    line-height: 100px;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    
+    &:hover {
+      background-color: #8282E3; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #zonas-recreativas {
+    width: 279px;
+    height: 149px;
+    border-radius: 10px;
+    background-color: #F59095; 
+    color: white;
+    line-height: 50px;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    &:hover {
+      background-color: #E67A7E; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #editar-servicio {
+    width: 279px;
+    height: 149px;
+    line-height: 100px;
+    border-radius: 10px;
+    background-color: #96B2FB; /* Azul pastel */
+    color: white;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    &:hover {
+      background-color: #8599E2; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #servicio-atendidos {
+    width: 279px;
+    height: 149px;
+    border-radius: 10px;
+    background-color: #5050B2; /* Azul pastel */
+    color: white;
+    line-height: 50px;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    
+    &:hover {
+      background-color: #434390; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #Vistas {
+    width: 279px;
+    height: 149px;
+    border-radius: 10px;
+    background-color: #8F8EED; /* Azul pastel */
+    color: white;
+    line-height: 100px;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    
+    &:hover {
+      background-color: #8282E3; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+  #Haste-Primiun {
+    width: 279px;
+    height: 149px;
+    border-radius: 10px;
+    background-color: #F59095; 
+    color: white;
+    line-height: 50px;
+    transition: all 0.3s;
+    font-size: 2em; /* Tamaño de la letra */
+    text-align: center; /* Centrar el texto */
+    cursor: pointer; /* Cambiar el cursor a un puntero */
+    &:hover {
+      background-color: #E67A7E; /* Cambiar el color de fondo al pasar el mouse */
+    }
+  }
+
+
+
+  .dropdown-spacer {
+    display: inline-block;
+    width: 10px; /* Adjust this value to your desired spacing */
+  }
+
+  .bienvenida {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
