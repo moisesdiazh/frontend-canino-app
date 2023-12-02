@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 
 const Registro = () => {
@@ -21,14 +22,27 @@ const Registro = () => {
 
   
 
-  const comunasSantiago = [
-    { id: 1, nombre: 'Santiago' },
-    { id: 2, nombre: 'Providencia' },
-    { id: 3, nombre: 'Ñuñoa' },
-    { id: 4, nombre: 'Macul' },
-    { id: 5, nombre: 'San Joaquín' },
-    // Agrega más comunas según sea necesario
-  ];
+  // const comunasSantiago = [
+  //   { id: 1, nombre: 'Santiago' },
+  //   { id: 2, nombre: 'Providencia' },
+  //   { id: 3, nombre: 'Ñuñoa' },
+  //   { id: 4, nombre: 'Macul' },
+  //   { id: 5, nombre: 'San Joaquín' },
+  //   // Agrega más comunas según sea necesario
+  // ];
+
+  const [comunas, setComunas] = useState([]);
+
+  useEffect(() => {
+    // Hacer la solicitud al endpoint de comunas usando Axios
+    axios.get('http://localhost:8080/api/comunas')
+      .then(response => setComunas(response.data))
+      .catch(error => console.error('Error al obtener comunas:', error));
+
+  }, []); // Se ejecuta solo una vez al montar el componente
+
+  console.log(comunas);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -147,7 +161,7 @@ const Registro = () => {
                 <div className="invalid-tooltip">Debe completar los datos.</div>
               </div>
 
-              <div className="col-md-6 position-relative">
+              {/* <div className="col-md-6 position-relative">
                 <label htmlFor="zona" className="form-label">Zona</label>
                 <select
                   className="form-select"
@@ -163,12 +177,11 @@ const Registro = () => {
                   <option value="zona3">Zona Poniente</option>
                   <option value="zona4">Zona Sur</option>
                   <option value="zona5">Zona Centro</option>
-                  {/* Añade más opciones según sea necesario */}
                 </select>
-                {/* Mensajes para validación */}
+                
                 <div className="valid-tooltip">¡Campo válido!</div>
                 <div className="invalid-tooltip">Debe seleccionar una zona.</div>
-              </div>
+              </div> */}
 
               <div className="col-md-6 position-relative">
                 <label htmlFor="nombre" className="form-label">Comuna</label>
@@ -181,9 +194,9 @@ const Registro = () => {
                   required
                 >
                   <option value="">Selecciona una comuna</option>
-                  {comunasSantiago.map((comuna) => (
-                    <option key={comuna.id} value={comuna.nombre}>
-                      {comuna.nombre}
+                  {comunas.map(comuna => (
+                    <option key={comuna.id} value={comuna.id}>
+                      {comuna.nombreComuna}
                     </option>
                   ))}
                 </select>
