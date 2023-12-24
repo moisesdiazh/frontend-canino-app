@@ -1,89 +1,104 @@
 // Importa las librerías necesarias y los estilos
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import Alert from "../alerts/Alert";
+import { useNavigate } from 'react-router-dom';
 
 const RegistroDog = () => {
-  console.log('Registro');
-  // Estados para los campos del formulario
-  const [nombre, setNombre] = useState('');
-  const [foto, setfoto] = useState('');
-  const [raza, setRaza] = useState('');
-  const [tamanno, setTamanno] = useState('');
-  const [sexo, setSexo] = useState('');
-  const [edad, setEdad] = useState('');
-  const [vacuna1, setVacuna1] = useState('');
-  const [fecha1, setFecha1] = useState('');
-  const [vacuna2, setVacuna2] = useState('');
-  const [fecha2, setFecha2] = useState('');
-  const [vacuna3, setVacuna3] = useState('');
-  const [fecha3, setFecha3] = useState('');
-  const [actividad, setActividad] = useState('');
-  const [comentario, setComentario] = useState('');
-  const [chip, setChip] = useState('');
+
+  const token = localStorage.getItem('token');
+
+  const [formData, setFormData] = useState({
+    usuario: token,
+    raza: '',
+    nombreCanino: '',
+    edad: 1,
+    chip: '',
+    peso: 1,
+    tamanno: '',
+    actividad: '',
+    sexo: ''
+  });
+
+
+  const [razas, setRazas] = useState([]);
+
+
+  const [alert, setAlert] = useState({});
+
+
+  const navigate = useNavigate();
+
+  const {msg} = alert;
+
+
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/razas', { maxRedirects: 5 })
+    .then(response => {
+      setRazas(response.data)
+    })
+    .catch(error => {
+      console.error('Error al obtener razas:', error);
+    });
+
+  }, []); 
+
   
 
   // Función para manejar el cambio en los campos
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Actualiza el estado correspondiente
-    switch (name) {
-      case 'nombre':
-        setNombre(value);
-        break;
-      case 'foto':
-        setfoto(value);
-        break;
-      case 'raza':
-        setRaza(value);
-        break;
-      case 'tamanno':
-        setTamanno(value);
-        break;
-      case 'sexo':
-        setSexo(value);
-        break;
-      case 'edad':
-        setEdad(value);
-        break;
-      case 'actividad':
-        setActividad(value);
-        break;
-      case 'vacuna1':
-        setVacuna1(value);
-        break;
-      case 'fecha1':
-        setFecha1(value);
-        break;
-      case 'vacuna2':
-        setVacuna2(value);
-        break;
-      case 'fecha2':
-        setFecha2(value);
-        break;
-      case 'vacuna3':
-        setVacuna3(value);
-        break;
-      case 'fecha3':
-        setFecha3(value);
-        break;
-      case 'comentario':
-        setComentario(value);
-        break;
-      case 'chip':
-        setChip(value);
-        break;
-      default:
-        break;
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes realizar acciones adicionales con los datos ingresados
+    
+    try {
+
+      if([formData.usuario, formData.raza, formData.nombreCanino, formData.edad, formData.chip, formData.tamanno, formData.actividad, formData.sexo].includes('')){ //validacion por si se encuentra vacio
+        setAlert({
+          msg: "Todos los campos son obligatorios",
+          error: true
+        });
+        return
+      }
+
+      const response = await fetch('http://localhost:8080/api/add-perro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        navigate('/Panel/RegistroDog');
+        setAlert({
+          msg: "Su mascota fue registrada satisfactoriamente",
+          error: false
+        })
+      }
+
+      if (!response.ok) {
+        navigate('/Panel/RegistroDog');
+        setAlert({
+          msg: "Su mascota ya se encuentra registrada",
+          error: true
+        })
+      }
+      
+      
+    } catch (error) {
+
+      setAlert({
+        msg: "Su mascota ya se encuentra registrada",
+        error: true
+      })
+    }
   };
 
   return (
@@ -97,16 +112,19 @@ const RegistroDog = () => {
             <hr />
             <div className="p-3 mb-2 bg-primary bg-gradient fw-bold text-white">Datos Caninos</div>
             <form onSubmit={handleSubmit} className="row g-3 needs-validation" noValidate>
+
+            {msg && <Alert alert={alert} />}
+
               {/* Campos del formulario */}
               {/* ... */}
               <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Nombre</label>
+                <label htmlFor="nombreCanino" className="form-label">Nombre</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="nombre"
-                  name="nombre"
-                  value={nombre}
+                  id="nombreCanino"
+                  name="nombreCanino"
+                  value={formData.nombreCanino}
                   onChange={handleInputChange}
                   required
                 />
@@ -114,33 +132,25 @@ const RegistroDog = () => {
                 <div className="valid-tooltip">¡Campo válido!</div>
                 <div className="invalid-tooltip">Debe completar los datos.</div>
               </div>
-              {/* Otros campos del formulario... */}
-              <div className="col-md-6 position-relative">
-                <label htmlFor="foto" className="form-label">Foto</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  id="foto"
-                  name="foto"
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
+            
              
               <div className="col-md-6 position-relative">
                 <label htmlFor="raza" className="form-label">Raza</label>
-                <input
-                  type="text"
-                  className="form-control"
+                <select
+                  className="form-select"
                   id="raza"
                   name="raza"
-                  value={raza}
+                  value={formData.raza}
                   onChange={handleInputChange}
                   required
-                />
+                >
+                  <option value="">Selecciona una raza</option>
+                  {razas.map(raza => (
+                    <option key={raza.id} value={raza.id}>
+                      {raza.nombreRaza}
+                    </option>
+                  ))}
+                </select>
                 {/* Mensajes para validación */}
                 <div className="valid-tooltip">¡Campo válido!</div>
                 <div className="invalid-tooltip">Debe completar los datos.</div>
@@ -153,15 +163,15 @@ const RegistroDog = () => {
                   className="form-select"
                   id="tamanno"
                   name="tamanno"
-                  value={tamanno}
+                  value={formData.tamanno}
                   onChange={handleInputChange}
                   required
                 >
                   <option value="">Selecciona una zona</option>
-                  <option value="zona1">Pequeño</option>
-                  <option value="zona2">Mediano</option>
-                  <option value="zona2">Grande</option>
-                  <option value="zona2">Gigante</option>
+                  <option value="Pequeño">Pequeño</option>
+                  <option value="Mediano">Mediano</option>
+                  <option value="Grande">Grande</option>
+                  <option value="Gigante">Gigante</option>
                   {/* Añade más opciones según sea necesario */}
                 </select>
                 {/* Mensajes para validación */}
@@ -175,14 +185,14 @@ const RegistroDog = () => {
                   className="form-select"
                   id="actividad"
                   name="actividad"
-                  value={actividad}
+                  value={formData.actividad}
                   onChange={handleInputChange}
                   required
                 >
                   <option value="">Selecciona una nivel de actividad</option>
-                  <option value="zona1">Tranquilo</option>
-                  <option value="zona2">Medio</option>
-                  <option value="zona2">Activo</option>
+                  <option value="Tranquilo">Tranquilo</option>
+                  <option value="Nedio">Medio</option>
+                  <option value="Activo">Activo</option>
 
                   {/* Añade más opciones según sea necesario */}
                 </select>
@@ -197,13 +207,13 @@ const RegistroDog = () => {
                   className="form-select"
                   id="sexo"
                   name="sexo"
-                  value={sexo}
+                  value={formData.sexo}
                   onChange={handleInputChange}
                   required
                 >
                   <option value="">Seleccione un sexo</option>
-                  <option value="zona1">Macho</option>
-                  <option value="zona2">Hembra</option>
+                  <option value="Macho">Macho</option>
+                  <option value="Hembra">Hembra</option>
                   {/* Añade más opciones según sea necesario */}
                 </select>
                 {/* Mensajes para validación */}
@@ -211,49 +221,30 @@ const RegistroDog = () => {
                 <div className="invalid-tooltip">Debe seleccionar una zona.</div>
               </div>
 
-              <div className="col-md-12 position-relative">
+              <div className="col-md-6 position-relative">
                 <label htmlFor="edad" className="form-label">Edad</label>
                 <input
                   type="number"
                   className="form-control"
                   id="edad"
                   name="edad"
-                  value={edad}
+                  value={formData.edad}
                   onChange={handleInputChange}
+                  min={1}
                   required
                 />
-                {/* Mensajes para validación */}
                 <div className="valid-tooltip">¡Campo válido!</div>
                 <div className="invalid-tooltip">Debe completar los datos.</div>
               </div>
-              <div className="col-md-6 position-relative">
-                <label htmlFor="zona" className="form-label">Vacuna</label>
-                <select
-                  className="form-select"
-                  id="vacuna1"
-                  name="vacuna1"
-                  value={vacuna1}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Selecciona una vacuna1</option>
-                  <option value="zona1">vacuna1</option>
-                  <option value="zona2">vacuna2</option>
-                  {/* Añade más opciones según sea necesario */}
-                </select>
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe seleccionar una zona.</div>
-              </div>
 
               <div className="col-md-6 position-relative">
-                <label htmlFor="fecha1" className="form-label">Fecha de Vacunación</label>
+                <label htmlFor="nombreCanino" className="form-label">Chip</label>
                 <input
-                  type="date"
-                  className="form-control form-control-date"
-                  id="fecha1"
-                  name="fecha1"
-                  value={fecha1}
+                  type="text"
+                  className="form-control"
+                  id="chip"
+                  name="chip"
+                  value={formData.chip}
                   onChange={handleInputChange}
                   required
                 />
@@ -262,81 +253,23 @@ const RegistroDog = () => {
                 <div className="invalid-tooltip">Debe completar los datos.</div>
               </div>
 
-
               <div className="col-md-6 position-relative">
-                <label htmlFor="vacuna2" className="form-label">Vacuna</label>
-                <select
-                  className="form-select"
-                  id="vacuna2"
-                  name="vacuna2"
-                  value={vacuna2}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Selecciona una vacuna</option>
-                  <option value="zona1">vacuna1</option>
-                  <option value="zona2">vacuna2</option>
-                  {/* Añade más opciones según sea necesario */}
-                </select>
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe seleccionar una zona.</div>
-              </div>
-
-              <div className="col-md-6 position-relative">
-                <label htmlFor="fecha2" className="form-label">Fecha de Vacunación</label>
+                <label htmlFor="edad" className="form-label">Peso</label>
                 <input
-                  type="date"
-                  className="form-control form-control-date"
-                  id="fecha2"
-                  name="fecha2"
-                  value={fecha2}
+                  type="number"
+                  className="form-control"
+                  id="peso"
+                  name="peso"
+                  value={formData.peso}
                   onChange={handleInputChange}
+                  min={1}
                   required
                 />
-                {/* Mensajes para validación */}
                 <div className="valid-tooltip">¡Campo válido!</div>
                 <div className="invalid-tooltip">Debe completar los datos.</div>
               </div>
 
-
-              <div className="col-md-6 position-relative">
-                <label htmlFor="vacuna3" className="form-label">Vacuna</label>
-                <select
-                  className="form-select"
-                  id="vacuna3"
-                  name="vacuna3"
-                  value={vacuna3}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Selecciona una vacuna</option>
-                  <option value="zona1">vacuna1</option>
-                  <option value="zona2">vacuna2</option>
-                  {/* Añade más opciones según sea necesario */}
-                </select>
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe seleccionar una zona.</div>
-              </div>
-
-              <div className="col-md-6 position-relative">
-                <label htmlFor="fecha3" className="form-label">Fecha de Vacunación</label>
-                <input
-                  type="date"
-                  className="form-control form-control-date"
-                  id="fecha3"
-                  name="fecha3"
-                  value={fecha3}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
-
-              
+          
 
                {/* ... Repite para los demás campos ... */}
               <div className="col-md-12">

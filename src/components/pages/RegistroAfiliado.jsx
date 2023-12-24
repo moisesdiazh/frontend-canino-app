@@ -1,74 +1,70 @@
 // Importa las librerías necesarias y los estilos
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Alert from "../alerts/Alert";
 
 const RegistroAfiliado = () => {
-  console.log('Registro');
-  // Estados para los campos del formulario
-  const [nombreServ, setNombre] = useState('');
-  const [servicio, setServicio] = useState('');
-  const [correoServ, setCorreo] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [precio, setPrecio] = useState('');
-  const [foto, setFoto] = useState('');
-  const [detalle, setDetalle] = useState('');
-  const [zona, setZona] = useState('');
-  const [region, setRegion] = useState('');
-  const [comuna, setComuna] = useState('');
-  const [direccion, setDireccion] = useState('');
+  
+  const token = localStorage.getItem('token');
 
-  // Función para manejar el cambio en los campos
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    // Actualiza el estado correspondiente
-    switch (name) {
-      case 'nombre':
-        setNombre(value);
-        break;
-      case 'servicio':
-        setServicio(value);
-        break;
-      case 'correo':
-        setCorreo(value);
-        break;
-      case 'telefono':
-        setTelefono(value);
-        break;
-      case 'precio':
-        setPrecio(value);
-        break;
-      case 'foto':
-        setFoto(value);
-        break;
-      case 'detalle':
-        setDetalle(value);
-        break;
-      case 'zona':
-        setZona(value);
-        break;
-      case 'region':
-        setRegion(value);
-        break;
-      case 'comuna':
-        setComuna(value);
-        break;
-      case 'direccion':
-        setDireccion(value);
-        break;
-      default:
-        break;
-    }
+  const [alert, setAlert] = useState({});
+
+  const navigate = useNavigate();
+
+  const {msg} = alert;
+
+  const userAfiliacion = {
+    usuario: token
   };
 
-  // Función para manejar el envío del formulario
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Formulario enviado');
-    // Aquí puedes realizar acciones adicionales con los datos ingresados
-  };
+    try {
+
+      if([token].includes('')){ //validacion por si se encuentra vacio
+        setAlert({
+          msg: "Error, debe salir de la aplicación y volver a loguearse, en caso de tener el mismo error debe comunicarse con Soporte de CaniConecta",
+          error: true
+        });
+        return
+      }
+
+      const response = await fetch('http://localhost:8080/api/add-afiliacion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userAfiliacion),
+      });
+
+      
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("afiliado", data['id']);
+        navigate('/Panel/PanelInicio');
+        
+      }
+      
+
+      if (!response.ok) {
+        navigate('/Panel/RegistroAfiliado');
+        setAlert({
+          msg: "Ya se encuentra afiliado a nuestra aplicación",
+          error: true
+        })
+      }
+      
+    } catch (error) {
+
+      setAlert({
+        msg: "Ya se encuentra afiliado a nuestra aplicación",
+        error: true
+      })
+    }
+  };  
 
   return (
 
@@ -77,173 +73,84 @@ const RegistroAfiliado = () => {
       <div className="row">
         <div className="col">
           <div className="shadow-lg p-3 mb-5 mt-4 bg-body rounded">
-            <span className="display-5 text-primary m-0" style={{ fontWeight: 'bold', fontSize: '1.5em' }}>Formulario de Afiliados</span>
+            <span className="display-5 text-primary m-0" style={{ fontWeight: 'bold', fontSize: '1.5em' }}>Términos y Condiciones del Programa de Afiliados</span>
             <hr />
-            <div className="p-3 mb-2 bg-primary bg-gradient fw-bold text-white">Datos del Negocio</div>
-            <form onSubmit={handleSubmit} className="row g-3 needs-validation" noValidate>
-              {/* Campos del formulario */}
-              {/* ... */}
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Nombre de fantasia</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="nombre"
-                  name="nombre"
-                  value={nombreServ}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
-              {/* Otros campos del formulario... */}
-              <div className="col-md-6 position-relative">
-                <label htmlFor="apellido" className="form-label">Apellido</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="servicio"
-                  name="servicio"
-                  value={setServicio}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
-             
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Correo</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="correo"
-                  name="correo"
-                  value={setCorreo}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
 
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Telefono</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="telefono"
-                  name="telefono"
-                  value={setTelefono}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
+            <div className="container">
+            {msg && <Alert alert={alert} />}
 
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Precio Consulta General</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="precio"
-                  name="precio"
-                  value={setPrecio}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
+              <h3>Bienvenido al Programa de Afiliados de CaniConecta</h3>
+              <p>Al unirte a nuestro programa, aceptas cumplir con los siguientes términos y condiciones:</p>
 
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Agregar Foto </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="foto"
-                  name="foto"
-                  value={setFoto}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
+              <ol>
+                  <li>
+                      <h5>Elegibilidad:</h5>
+                      <p>a. Para participar en el programa de afiliados, debes tener al menos 18 años.</p>
+                      <p>b. Nos reservamos el derecho de aceptar o rechazar solicitudes de afiliación a nuestra entera discreción.</p>
+                  </li>
 
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Región</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="region"
-                  name="region"
-                  value={setRegion}
-                  onChange={handleInputChange}
-                  required
-                />
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
+                  <li>
+                      <h5>Inscripción en el Programa:</h5>
+                      <p>a. Debes completar el formulario de inscripción con información precisa y actualizada.</p>
+                      <p>b. Nos reservamos el derecho de revisar y aprobar todas las solicitudes de afiliación.</p>
+                  </li>
 
-              <div className="col-md-6 position-relative">
-                <label htmlFor="nombre" className="form-label">Comuna</label>
-                <select
-                  className="form-select"
-                  id="comuna"
-                  name="comuna"
-                  value={setComuna}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Selecciona una zona</option>
-                  <option value="zona1">Zona 1</option>
-                  <option value="zona2">Zona 2</option>
-                  {/* Añade más opciones según sea necesario */}
-                </select>
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe completar los datos.</div>
-              </div>
+                  <li>
+                      <h5>Responsabilidades del Afiliado:</h5>
+                      <p>a. Como afiliado, te comprometes a promocionar nuestros productos/servicios de manera ética y legal.</p>
+                      <p>b. No se permite el uso de métodos de marketing engañosos, spam o cualquier actividad que pueda dañar la reputación de la plataforma.</p>
+                  </li>
 
-              <div className="col-md-6 position-relative">
-                <label htmlFor="zona" className="form-label">Zona</label>
-                <select
-                  className="form-select"
-                  id="zona"
-                  name="zona"
-                  value={setZona}
-                  onChange={handleInputChange}
-                  required
-                >
-                  <option value="">Selecciona una zona</option>
-                  <option value="zona1">Zona 1</option>
-                  <option value="zona2">Zona 2</option>
-                  {/* Añade más opciones según sea necesario */}
-                </select>
-                {/* Mensajes para validación */}
-                <div className="valid-tooltip">¡Campo válido!</div>
-                <div className="invalid-tooltip">Debe seleccionar una zona.</div>
-              </div>
+                  <li>
+                      <h5>Comisiones y Pagos:</h5>
+                      <p>a. Te pagaremos comisiones por las ventas generadas a través de tus enlaces de afiliado, de acuerdo con la estructura de comisiones establecida.</p>
+                      <p>b. Los pagos se realizarán mensualmente y estarán sujetos a umbral mínimo de [monto].</p>
+                  </li>
 
-              
+                  <li>
+                      <h5>Uso de Enlaces de Afiliados:</h5>
+                      <p>a. Se te proporcionarán enlaces de afiliados únicos. Es tu responsabilidad garantizar que estos enlaces se utilicen correctamente.</p>
+                      <p>b. No se permite la manipulación de enlaces para obtener comisiones de manera fraudulenta.</p>
+                  </li>
 
-               {/* ... Repite para los demás campos ... */}
-              <div className="col-md-12">
-              <button onClick={handleSubmit} className="btn btn-success" type="submit">
-                Registrar
-              </button>
+                  <li>
+                      <h5>Duración y Terminación:</h5>
+                      <p>a. El acuerdo de afiliación tiene una duración indefinida, pero cualquiera de las partes puede rescindir el acuerdo en cualquier momento con o sin causa.</p>
+                      <p>b. Nos reservamos el derecho de dar por terminada tu participación en el programa si se violan estos términos y condiciones.</p>
+                  </li>
+
+                  <li>
+                      <h5>Modificaciones:</h5>
+                      <p>a. Nos reservamos el derecho de realizar cambios en estos términos y condiciones en cualquier momento. Te notificaremos de cualquier cambio a través de la dirección de correo electrónico proporcionada durante la inscripción.</p>
+                  </li>
+
+                  <li>
+                      <h5>Confidencialidad:</h5>
+                      <p>a. Toda la información confidencial compartida durante la participación en el programa debe ser tratada como tal y no debe divulgarse a terceros.</p>
+                  </li>
+
+                  <li>
+                      <h5>Ley Aplicable:</h5>
+                      <p>a. Estos términos y condiciones se regirán e interpretarán de acuerdo con las leyes del Chile sin tener en cuenta sus disposiciones sobre conflictos de leyes.</p>
+                  </li>
+              </ol>
+
+              <p>Al unirte al Programa de Afiliados, reconoces haber leído, comprendido y aceptado estos términos y condiciones.</p>
+
+              <p>Si tienes alguna pregunta o inquietud, no dudes en contactarnos en <a href="mailto:info@caniConecta.com">info@caniConecta.com</a>.</p>
+
+              <p>Gracias por unirte a nuestro programa de afiliados.</p>
+
+              <p>Atentamente,</p>
+              <p>CaniConecta</p>
+
+              <div className="d-flex justify-content-center my-2">
+                <form  onSubmit={handleSubmit}>
+                  <button className="btn btn-primary">Suscribirse</button>
+                </form>
               </div>
-            </form>
+            </div>
+           
           </div>
         </div>
       </div>

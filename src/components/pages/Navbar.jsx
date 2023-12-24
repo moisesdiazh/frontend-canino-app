@@ -1,9 +1,17 @@
 import React from "react";
 import icono from '../../assets/logoNav.svg';
 import avatar from '../../assets/avatar2.png'; // Asegúrate de tener la ruta correcta
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Navbar() {
+const Navbar = () => {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/');
+  };
+
   return (
     <div className="navbarPanel d-flex justify-content-between align-items-center">
       <div>
@@ -39,7 +47,8 @@ function Navbar() {
               </li>
               <li>
               
-                <Link to="/" className="btn btn-link" style={{textDecoration: 'none'}}>Salir</Link>
+                <button className="btn btn-link" style={{textDecoration: 'none'}} onClick={handleLogout}>Salir</button>
+                {/* <Link to="/" className="btn btn-link" style={{textDecoration: 'none'}}>Salir</Link> */}
                 
               </li>
             </ul>
