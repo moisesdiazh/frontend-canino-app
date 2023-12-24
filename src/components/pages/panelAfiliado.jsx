@@ -1,38 +1,38 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faDog, faUsers } from '@fortawesome/free-solid-svg-icons'; // Importa los íconos que necesites
+import React, {useState, useEffect} from "react";
 import afiliado from '../../assets/afiliados.png';
 import '../style/inicio.css';
 import { Accordion, Card} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 
 
 
-function PanelAfiliado () {
+
+const PanelAfiliado = () => {
+
 
     return(
         <div className="Panel-inicio">
             <div className="bienvenida" >
                 <div>
-                    <h3>Bienvenid@ Jose</h3>
+                    <h3>Bienvenid@</h3>
                     <p>Que tengas un excelente día</p>
                 </div>
                 <div className="dropdown">
-                    <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
+                    <select
+                        className="btn btn-secondary"
+                        id="servicio"
+                        name="servicio"
+                        required
                     >
-                        <i className="mdi mdi-calendar"></i> Seleccione Servicio
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a className="dropdown-item" href="#">Servicio 1</a></li>
-                        <li><a className="dropdown-item" href="#">Servicio 2</a></li>
-                    </ul>
+                        <option value="">Selecciona un Servicio</option>
+                            <option  value="Lasos Pet - Clinica Veterina">
+                            Lasos Pet - Clinica Veterina
+                            </option>
+                    
+                      
+                    </select>
                 </div>
             </div>
 
@@ -55,21 +55,21 @@ function PanelAfiliado () {
                         <div class="col-md-6">
                         <div class="card mb-4" id = "servicio-atendidos">
                             <div class="card-body rounded">
-                            Clientes Atendidos: 10
+                            Clientes Atendidos: 0
                             </div>
                         </div>
                         </div>
                         <div class="col-md-6">
                         <div class="card mb-4" id = "Vistas">
                             <div class="card-body rounded">
-                            Calificación: 4.9
+                            Calificación: 5.0
                             </div>
                         </div>
                         </div>
                         <div class="col-md-6">
                         <div class="card mb-4" id ="Haste-Primiun">
                             <div class="card-body rounded">
-                            Asciende a Primiun
+                            Asciende a Premium
                             </div>
                         </div>
                         </div>
@@ -106,29 +106,18 @@ function PanelAfiliado () {
                             </thead>
                             <tbody>
                                 <tr>
-                                <th scope="row">27-11-2023 15:00:00</th>
-                                <td>Jose Guerra</td>
-                                <td>Thunder</td>
-                                <td>01-12-2023 14:00:00</td>
-                                <td>jose@gmail.com</td>
-                                <td>+58 935 111 333</td>
-                                <td>
-                                    <button class="btn btn-success">Aceptar</button>
-                                    <button class="btn btn-danger">Rechazar</button>
+                                <th scope="row"></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td >
+                                    {/* <button class="btn btn-success">Aceptar</button>
+                                    <button class="btn btn-danger">Rechazar</button> */}
                                 </td>
                                 </tr>
-                                <tr>
-                                <th scope="row">26-11-2023 13:00:00</th>
-                                <td>Gabriela Rodriguez</td>
-                                <td>Buffy</td>
-                                <td>01-12-2023 18:00:00</td>
-                                <td>gabriela@gmail.com</td>
-                                <td>+58 935 456 111</td>
-                                <td>
-                                    <button class="btn btn-success">Aceptar</button>
-                                    <button class="btn btn-danger">Rechazar</button>
-                                </td>
-                                </tr>
+                                
                                 
                             </tbody>
                             </table>
@@ -156,24 +145,15 @@ function PanelAfiliado () {
                                 </tr>
                             </thead>
                             <tbody>
+                                
                                 <tr>
-                                <th scope="row">28-11-2023 15:00:00</th>
-                                <td>Jose Guerra</td>
-                                <td>Thunder</td>
-                                <td>jose@gmail.com</td>
-                                <td>5</td>
+                                <th scope="row"></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td>
-                                    <button class="btn btn-success">Calificar</button>
-                                </td>
-                                </tr>
-                                <tr>
-                                <th scope="row">26-11-2023 13:00:00</th>
-                                <td>Gabriela Rodriguez</td>
-                                <td>Buffy</td>
-                                <td>gabriela@gmail.com</td>
-                                <td>4</td>
-                                <td>
-                                    <button class="btn btn-success">Calificar</button>
+                                    {/* <button class="btn btn-success">Calificar</button> */}
                                 </td>
                                 </tr>
                                 

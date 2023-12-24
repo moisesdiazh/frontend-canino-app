@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from "./Navbar";
 import PanelSidebar from "./PanelSidebar";
 import '../style/panel.css';
 import { Outlet } from "react-router-dom";
+import axios from 'axios';
 
 
-function Panel() {
 
+const Panel = () => {
+
+    
     useEffect(() => {
         // Ajustar el padding del body solo cuando el componente se monte
         document.body.classList.add('panel-body-padding');

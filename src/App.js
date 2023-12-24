@@ -17,6 +17,9 @@ import PanelInicio from './components/pages/PanelIncio';
 import RegistroAfiliado from './components/pages/RegistroAfiliado';
 import PanelAfiliado from './components/pages/panelAfiliado';
 import ResetPass from './components/pages/ResetPass';
+import AddVacunas from './components/pages/AddVacunas';
+import AddServicio from './components/pages/AddServicio';
+
 
 
 
@@ -45,6 +48,9 @@ function App() {
           <Route path="PanelInicio" element={<PanelInicio />} />
           <Route path="RegistroAfiliado" element={<RegistroAfiliado />} />
           <Route path="PanelAfiliado" element={<PanelAfiliado />} />
+          <Route path="AddVacunas" element={<AddVacunas />} />
+          <Route path="AddServicio" element={<AddServicio />} />
+
         </Route>
 
         {/*<Route path="*" element={<NoMatch />} />*/}

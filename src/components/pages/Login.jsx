@@ -1,13 +1,67 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../style/login.css';
 import icono from '../../assets/icono2.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import "./Registro"
 import ResetPass from './ResetPass';//Import the PasswordResetForm component
+import axios from 'axios';
+import Alert from "../alerts/Alert";
+
+
 
 const Login = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [alert, setAlert] = useState({});
+
+  const afiliacionToken = localStorage.getItem('afiliado');
+  const [afiliacion, setAfiliacion] = useState({});
+
+  const navigate = useNavigate();
+
+  const {msg} = alert;
+
+
+
+  const handleLogin = async (e) => {
+
+    e.preventDefault();
+
+    if([email, password].includes('')){ //validacion por si se encuentra vacio
+      setAlert({
+        msg: "Todos los campos son obligatorios",
+        error: true
+      });
+      return
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/login', {
+        email,
+        password,
+      });
+
+    
+      // Verificar si la respuesta tiene datos (usuarios autenticados)
+      if (response['data'][0]['email'] !== '') {
+
+        localStorage.setItem("token", response['data'][0]['id']);
+        navigate('/Panel/panelInicio');
+        console.log('Inicio de sesión exitoso:', response.data);
+        setAlert({})
+      }
+    } catch (error) {
+      setAlert({
+        msg: "Email o contraseña incorrecta",
+        error: true
+      })
+    }
+  };
+
+
   const [showPasswordResetModal, setShowPasswordResetModal] = useState(false); // State variable for password reset modal
 
   const handlePasswordResetClick = () => {
@@ -17,6 +71,8 @@ const Login = () => {
   const handlePasswordResetModalClose = () => {
     setShowPasswordResetModal(false); // Close password reset modal
   };
+
+
 
   return (
     <div>
@@ -30,20 +86,28 @@ const Login = () => {
       </nav>
 
       <main className="form-signin text-center shadow-lg p-3 mb-5">
-        <form id="formLogin" action="/login" method="POST">
-          <img className="mb-4" src={icono} alt="" width="310" height="310" />
+
+
+        <form id="formLogin">
+          <img className="" src={icono} alt="" width="310" height="310" />
+
+          {msg && <Alert alert={alert} />}
+
 
           <div className="form-floating">
-            <input type="text" className="form-control" id="user" name="user" placeholder="User" />
-            <label htmlFor="user">Correo</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control" id="email" name="email" placeholder="Email" />
+            <label htmlFor="email">Email</label>
           </div>
 
           <div className="form-floating">
-            <input type="password" className="form-control" id="pass" name="pass" placeholder="Password" />
-            <label htmlFor="pass">Contraseña</label>
+            <input type="password"  value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" id="password" name="password" placeholder="Password" />
+            <label htmlFor="password">Contraseña</label>
           </div>
 
-          <Link to="/Panel" className="w-100 btn btn-lg btn-primary">Ingresar</Link>
+          <button onClick={handleLogin} className="w-100 btn btn-lg btn-primary">Iniciar sesión</button>
+
+
+          {/* <Link to="/Panel" className="w-100 btn btn-lg btn-primary">Ingresar</Link> */}
 
           <br /><br />
 
